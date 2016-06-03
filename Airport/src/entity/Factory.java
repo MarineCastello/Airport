@@ -40,9 +40,8 @@ public class Factory {
 		return new FlightPlan();
 	}
 
-	public static FlightPlan createFlightPlan(Plane plane, Airport airportDeparture, Airport airportArrival,
-			FlightDuration duration, Date departureTime) {
-		return new FlightPlan(plane, airportDeparture, airportArrival, duration, departureTime);
+	public static FlightPlan createFlightPlan(Plane plane, FlightDuration duration, Date departureTime) {
+		return new FlightPlan(plane, duration, departureTime);
 	}
 
 }
