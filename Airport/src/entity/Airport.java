@@ -26,6 +26,10 @@ public class Airport {
 		this.timezone = timezone;
 		this.listAirlines = new ArrayList<Airline>();
 	}
+	
+	public void addAirline(Airline a){
+		this.listAirlines.add(a);
+	}
 
 	public String getAirportName() {
 		return airportName;
