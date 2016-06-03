@@ -23,7 +23,7 @@ public class PlaneService {
 		return p.isAvailable();
 	}
 
-	public void updateCurrentAirport(Plane p, Airport a) {
+	public void updateCurrentAirport(Plane p, Airport a) throws MyDBException {
 		PlaneDAO.getInstance().updateCurrentAirport(p, a);
 	}
 
