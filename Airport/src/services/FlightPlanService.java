@@ -1,6 +1,7 @@
 package services;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import dbAccess.FlightPlanDAO;
@@ -45,10 +46,20 @@ public class FlightPlanService {
 		FlightPlan fp = Factory.createFlightPlan(p, fd, departureTime);
 		FlightPlanDAO.getInstance().insertFlightPlan(fp);
 	}
-	
-	public List<String> selectAll(){
-		
+
+	/**
+	 * Affichage de toute la liste des plans de vol
+	 * 
+	 * @return la liste des plans de vol
+	 * @throws MyDBException
+	 */
+	public List<String> selectAll() throws MyDBException {
+		List<FlightPlan> listFlightPlan = FlightPlanDAO.getInstance().selectAll();
+		List<String> listResult = new ArrayList<String>();
+		for (FlightPlan fp : listFlightPlan) {
+			listResult.add(fp.toString());
+		}
+		return listResult;
 	}
-	List<FlightPlan> selectAll()
 
 }
