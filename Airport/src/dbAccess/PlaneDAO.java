@@ -3,7 +3,6 @@ package dbAccess;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -462,4 +461,48 @@ public class PlaneDAO {
 
 		return lstPlanes;
 	}
+	
+	public Integer selectIdPlane(String name) throws MyDBException {
+		Integer id=0;
+		
+		ResultSet resultat = null;
+		String requete = "SELECT id_plane FROM plane WHERE plane_name = ?;";
+		PreparedStatement preparedStmt = null;
+
+		// connexion à la base de données
+		getConnection();
+		// envoi de la requete
+		try {
+			preparedStmt = dbaccess.getConnection().prepareStatement(requete);
+			preparedStmt.setString(1, name);
+			resultat = preparedStmt.executeQuery();
+		} catch (SQLException e1) {
+			throw new MyDBException("Erreur lors de la création ou de l'exécution da la requete de selection");
+		}
+
+		// traitement des résultats
+		try {
+			if (resultat.next()) {
+				id = resultat.getInt("id_plane");
+			}
+		} catch (SQLException e) {
+			throw new MyDBException("Erreur lors de la récupération des données du select");
+		}
+
+		// fermeture du ResultSet ainsi que de la connexion
+		try {
+			preparedStmt.close();
+		} catch (SQLException e1) {
+			throw new MyDBException("Erreur lors de la fermeture du statement de selection");
+		}
+		try {
+			resultat.close();
+		} catch (SQLException e) {
+			throw new MyDBException("Erreur lors de la fermeture du ResultSet");
+		}
+		close();
+		
+		return id;
+	}
+	
 }

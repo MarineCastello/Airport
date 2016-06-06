@@ -3,11 +3,9 @@ package dbAccess;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import entity.Airline;
 import entity.Airline;
 import entity.Factory;
 
@@ -66,13 +64,9 @@ public class AirlineDAO {
 	 * 
 	 * @param m
 	 *            Airline à insérer
-	 * @return nombre d'enregistrements impactés
 	 * @throws MyDBException
 	 */
-	public Integer insertAirline(Airline a) throws MyDBException {
-		Integer nbMaj = 0;
-
-		// ajout de l'avion avec le bon id_airline et le bon id_Airline
+	public void insertAirline(Airline a) throws MyDBException {
 		String requete = "INSERT INTO Airline (airline_name) VALUES (?);";
 		PreparedStatement preparedStmt = null;
 
@@ -90,8 +84,6 @@ public class AirlineDAO {
 			throw new MyDBException("Erreur lors du close du statement de l'insertion");
 		}
 		close();
-
-		return nbMaj;
 	}
 
 	/**
