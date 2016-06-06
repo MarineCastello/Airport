@@ -24,25 +24,27 @@ public class AirlineService {
 		Airline a = Factory.createAirline(airlineName);
 		AirlineDAO.getInstance().insertAirline(a);
 	}
-	
+
 	/**
 	 * Renvoie tous les éléments de la table Airline
+	 * 
 	 * @return
 	 * @throws MyDBException
 	 */
-	public List<String> selectAll() throws MyDBException{
+	public List<String> selectAll() throws MyDBException {
 		List<Airline> listAirlines = AirlineDAO.getInstance().selectAll();
 		List<String> listResult = new ArrayList<String>();
-		for(Airline a : listAirlines){
+		for (Airline a : listAirlines) {
 			listResult.add(a.toString());
 		}
 		return listResult;
 	}
 
 	/*
-	public void updateAirline(String airlineName) {
-		Airline a = Factory.createAirline(airlineName);
-		AirlineDAO.getInstance().updateAirline(a);
-	}*/
+	 * public void updateAirline(String airlineName) {
+	 * Airline a = Factory.createAirline(airlineName);
+	 * AirlineDAO.getInstance().updateAirline(a);
+	 * }
+	 */
 
 }
