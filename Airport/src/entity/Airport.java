@@ -19,6 +19,14 @@ public class Airport {
 		this.listAirlines = new ArrayList<Airline>();
 	}
 
+	Airport(String airportName) {
+		this.airportName = airportName;
+		this.city = "";
+		this.country = "";
+		this.timezone = 0;
+		this.listAirlines = new ArrayList<Airline>();
+	}
+
 	Airport(String airportName, String city, String country, int timezone) {
 		this.airportName = airportName;
 		this.city = city;
@@ -26,8 +34,8 @@ public class Airport {
 		this.timezone = timezone;
 		this.listAirlines = new ArrayList<Airline>();
 	}
-	
-	public void addAirline(Airline a){
+
+	public void addAirline(Airline a) {
 		this.listAirlines.add(a);
 	}
 

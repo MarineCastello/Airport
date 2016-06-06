@@ -32,6 +32,10 @@ public class Factory {
 		return new Airport(airportName, city, country, timezone);
 	}
 
+	public static Airport createAirport(String airportName) {
+		return new Airport(airportName);
+	}
+
 	public static FlightDuration createFlightDuration() {
 		return new FlightDuration();
 	}
