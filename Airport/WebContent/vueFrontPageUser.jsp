@@ -5,11 +5,19 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link rel="stylesheet" type="text/CSS" href="vueFrontPageUserCSS.css"/>
+<script type="text/javascript" src="airportJS.js"></script>
 <title>Recherche Ultime</title>
 </head>
 <body>
 	<div id="container">
 		<form action="ControlerServlet" method="post" id="formulaire">
+			<div id="divDynamicList">
+				<select name="DYNAMICLIST" id="dynamicList" onchange="">
+					<option value="0" class="elmtFilter">Choisir une action</option>
+					<option value="1" class="elmtFilter">Avions disponibles dans un aéroport donné</option>
+					<option value="2" class="elmtFilter">Avions en vol</option>
+				</select>
+			</div>
 			<div class="champsForm">
 				<div class="divForm">Aeroport de depart</div><input type="text" name="DEPARTAIRPORT" placeholder="Aeroport de depart" class="textBoxForm"/>
 			</div>
@@ -20,10 +28,7 @@
 				<div class="divForm">Matricule de l'avion</div><input type="text" name="PLANEID" placeholder="Matricule de l'avion" class="textBoxForm"/>
 			</div>
 			<div class="champsForm">
-				<div class="divForm">Avions en vol uniquement</div><input type="checkbox" name="CHECKBOX" id="checkBoxPlane"/>
-			</div>
-			<div class="champsForm">
-			<input type="submit" value="Rechercher" id="researchButton"/>
+			<input type="submit" value="Rechercher" class="button"/>
 			</div>
 		</form>
 	</div>

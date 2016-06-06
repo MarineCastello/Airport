@@ -42,8 +42,17 @@ public class ControlerServlet extends HttpServlet {
 	}
 	
 	public void doWork(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		if (request.getParameter("DEPARTAIRPORT") != null && request.getParameter("CHECKBOX") == null) {
+		switch (request.getParameter("DYNAMICLIST")) {
+		case "1":
 			getListPlaneByAirport(request, response);
+			break;
+			
+		case "2":
+			getListPlaneInFlight(request, response);
+			break;
+
+		default:
+			break;
 		}
 	}
 	
@@ -51,23 +60,38 @@ public class ControlerServlet extends HttpServlet {
 		ModelBeanPlaneInAirport beanPlaneInAirport = new ModelBeanPlaneInAirport("", new ArrayList<String>());
 		
 		// Traitement des entrees de la page d'accueil
-		if (request.getParameter("DEPARTAIRPORT") != null) {
-			String departAirport = "";
+		String departAirport = "";
 			
-			try {
-				departAirport = request.getParameter("DEPARTAIRPORT");
-				
-				// metier
-				PlaneService planeService = PlaneService.getInstance();
-				List<String> lstPlane = planeService.selectAvailablePlanes(departAirport);
-				beanPlaneInAirport = new ModelBeanPlaneInAirport(departAirport, lstPlane);
-			} catch (Exception e) {
-				System.out.println("Erreur lors de la recuperation du bean 'PlaneInAirport'");
-			}
+		try {
+			departAirport = request.getParameter("DEPARTAIRPORT");
+			
+			// metier
+			PlaneService planeService = PlaneService.getInstance();
+			List<String> lstPlane = planeService.selectAvailablePlanes(departAirport);
+			beanPlaneInAirport = new ModelBeanPlaneInAirport(departAirport, lstPlane);
+		} catch (Exception e) {
+			System.out.println("Erreur lors de la recuperation du bean 'PlaneInAirport'");
 		}
 		
 		// Passage a la vueListPlaneInAirport.jsp
 		request.setAttribute("beanPlaneInAirport", beanPlaneInAirport);
 		request.getRequestDispatcher("/vueListPlaneInAirport.jsp").forward(request, response);
+	}
+	
+	public void getListPlaneInFlight(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		ModelBeanPlaneInFlight beanPlaneInFlight = new ModelBeanPlaneInFlight(new ArrayList<String>());
+		
+		try {
+			// metier
+			PlaneService planeService = PlaneService.getInstance();
+			List<String> lstPlane = planeService.selectPlanesInFlight();
+			beanPlaneInFlight = new ModelBeanPlaneInFlight(lstPlane);
+		} catch (Exception e) {
+			System.out.println("Erreur lors de la recuperation du bean 'PlaneInFlight'");
+		}
+		
+		// Passage a la vueListPlaneInAirport.jsp
+		request.setAttribute("beanPlaneInFlight", beanPlaneInFlight);
+		request.getRequestDispatcher("/vueListPlaneInFlight.jsp").forward(request, response);
 	}
 }
