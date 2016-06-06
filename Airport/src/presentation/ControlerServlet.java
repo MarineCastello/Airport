@@ -46,22 +46,26 @@ public class ControlerServlet extends HttpServlet {
 	}
 
 	public void doWork(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		switch (request.getParameter("DYNAMICLIST")) {
-		case "1":
-			getListPlaneByAirport(request, response);
-			break;
+		if (request.getParameter("DYNAMICLIST") != null) {
 
-		case "2":
-			getListPlaneInFlight(request, response);
-			break;
+			switch (request.getParameter("DYNAMICLIST")) {
+			case "1":
+				getListPlaneByAirport(request, response);
+				break;
 
-		case "3":
-			getPlane(request, response);
-			break;
+			case "2":
+				getListPlaneInFlight(request, response);
+				break;
 
-		default:
-			break;
+			case "3":
+				getPlane(request, response);
+				break;
+
+			default:
+				break;
+			}
 		}
+		
 	}
 
 	public void getListPlaneByAirport(HttpServletRequest request, HttpServletResponse response)

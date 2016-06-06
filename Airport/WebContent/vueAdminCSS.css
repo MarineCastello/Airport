@@ -64,7 +64,13 @@ body
 {
 	font-family: "Calibri";
 	display: flex;
+	flex-direction: column;
 	font-weight: bold;
+}
+
+.divSeparator
+{
+	border: black 2px solid;
 }
 
 #researchButton
