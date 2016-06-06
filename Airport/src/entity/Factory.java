@@ -12,7 +12,7 @@ public class Factory {
 		return new Plane(planeName);
 	}
 
-	public static Plane createPlane(String planeName, Airport currentAirport, Airline airline, boolean available) {
+	public static Plane createPlane(String planeName, Airport currentAirport, Airline airline, int available) {
 		return new Plane(planeName, currentAirport, airline, available);
 	}
 

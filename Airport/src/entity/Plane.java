@@ -5,23 +5,23 @@ public class Plane {
 	private String planeName;
 	private Airport currentAirport;
 	private Airline airline;
-	private boolean available;
+	private int available;
 
 	Plane() {
 		this.planeName = "";
 		this.currentAirport = Factory.createAirport();
 		this.airline = Factory.createAirline();
-		this.available = false;
+		this.available = 0;
 	}
 
 	Plane(String planeName) {
 		this.planeName = planeName;
 		this.currentAirport = Factory.createAirport();
 		this.airline = Factory.createAirline();
-		this.available = false;
+		this.available = 0;
 	}
 
-	Plane(String planeName, Airport currentAirport, Airline airline, boolean available) {
+	Plane(String planeName, Airport currentAirport, Airline airline, int available) {
 		this.planeName = planeName;
 		this.currentAirport = currentAirport;
 		this.airline = airline;
@@ -44,11 +44,11 @@ public class Plane {
 		this.currentAirport = currentAirport;
 	}
 
-	public boolean isAvailable() {
-		return available;
+	public int getAvailable() {
+		return this.available;
 	}
 
-	public void setAvailable(boolean available) {
+	public void setAvailable(int available) {
 		this.available = available;
 	}
 

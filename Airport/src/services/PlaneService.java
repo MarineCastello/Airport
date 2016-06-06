@@ -22,9 +22,9 @@ public class PlaneService {
 		return instance;
 	}
 
-	public boolean getAvailability(String planeName) {
+	public int getAvailability(String planeName) {
 		Plane p = Factory.createPlane(planeName);
-		return p.isAvailable();
+		return p.getAvailable();
 	}
 
 	public void updateCurrentAirport(String planeName, String airportName) throws MyDBException {
@@ -39,7 +39,7 @@ public class PlaneService {
 		PlaneDAO.getInstance().updatePlaneAirline(p, a);
 	}
 
-	public void insertPlane(String planeName, String currentAirportName, String airlineName, boolean available)
+	public void insertPlane(String planeName, String currentAirportName, String airlineName, int available)
 			throws MyDBException {
 		Airport currentAirport = Factory.createAirport(currentAirportName);
 		Airline airline = Factory.createAirline(airlineName);

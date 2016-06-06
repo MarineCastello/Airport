@@ -1,6 +1,8 @@
 package services;
 
 import java.sql.Date;
+import java.util.List;
+
 import dbAccess.FlightPlanDAO;
 import dbAccess.MyDBException;
 import entity.Airport;
@@ -43,5 +45,10 @@ public class FlightPlanService {
 		FlightPlan fp = Factory.createFlightPlan(p, fd, departureTime);
 		FlightPlanDAO.getInstance().insertFlightPlan(fp);
 	}
+	
+	public List<String> selectAll(){
+		
+	}
+	List<FlightPlan> selectAll()
 
 }
