@@ -14,6 +14,13 @@ public class Plane {
 		this.available = false;
 	}
 
+	Plane(String planeName) {
+		this.planeName = planeName;
+		this.currentAirport = Factory.createAirport();
+		this.airline = Factory.createAirline();
+		this.available = false;
+	}
+
 	Plane(String planeName, Airport currentAirport, Airline airline, boolean available) {
 		this.planeName = planeName;
 		this.currentAirport = currentAirport;

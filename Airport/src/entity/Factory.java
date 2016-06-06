@@ -8,6 +8,10 @@ public class Factory {
 		return new Plane();
 	}
 
+	public static Plane createPlane(String planeName) {
+		return new Plane(planeName);
+	}
+
 	public static Plane createPlane(String planeName, Airport currentAirport, Airline airline, boolean available) {
 		return new Plane(planeName, currentAirport, airline, available);
 	}

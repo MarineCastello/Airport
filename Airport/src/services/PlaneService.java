@@ -26,12 +26,14 @@ public class PlaneService {
 		return p.isAvailable();
 	}
 
+
 	//public void updateCurrentAirport(Plane p, Airport a) throws MyDBException {
 	//	PlaneDAO.getInstance().updateCurrentAirport(p, a);
 	//}
 	
 	public void insertPlane(String planeName, Airport currentAirport, Airline airline, boolean available) throws MyDBException {
 		Plane p = Factory.createPlane(planeName, currentAirport, airline, available);
+
 		PlaneDAO.getInstance().insertPlane(p);
 		// On ne vérifie pas si l'avion existe déjà en base de données
 	}
