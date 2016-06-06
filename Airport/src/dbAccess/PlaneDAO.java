@@ -244,8 +244,8 @@ public class PlaneDAO {
 				+ "FROM rechercheultime.plane P "
 				+ "INNER JOIN rechercheultime.airport A ON P.fk_id_airport = A.id_airport "
 				+ "INNER JOIN rechercheultime.airline Ai ON P.fk_id_airline = Ai.id_airline "
-				+ "WHERE airport_name like " + nameAirport + " AND available = 1;";
-		Statement stmt = null;
+				+ "WHERE airport_name like ? AND available = 1;";
+		PreparedStatement preparedStmt = null;
 		Airline airline = null;
 		Airport airport = null;
 
@@ -253,8 +253,9 @@ public class PlaneDAO {
 		getConnection();
 		// envoi de la requete
 		try {
-			stmt = dbaccess.getConnection().createStatement();
-			resultat = stmt.executeQuery(requete);
+			preparedStmt = dbaccess.getConnection().prepareStatement(requete);
+			preparedStmt.setString(1, nameAirport);
+			resultat = preparedStmt.executeQuery();
 		} catch (SQLException e1) {
 			throw new MyDBException("Erreur lors de la création ou de l'exécution da la requete de selection");
 		}
@@ -286,7 +287,7 @@ public class PlaneDAO {
 
 		// fermeture du ResultSet ainsi que de la connexion
 		try {
-			stmt.close();
+			preparedStmt.close();
 		} catch (SQLException e1) {
 			throw new MyDBException("Erreur lors de la fermeture du statement de selection");
 		}
