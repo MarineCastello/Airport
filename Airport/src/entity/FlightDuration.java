@@ -12,6 +12,12 @@ public class FlightDuration {
 		this.duration = 0;
 	}
 
+	FlightDuration(Airport airportDeparture, Airport airportArrival) {
+		this.airportDeparture = airportDeparture;
+		this.airportArrival = airportArrival;
+		this.duration = 0;
+	}
+
 	FlightDuration(Airport airportDeparture, Airport airportArrival, int duration) {
 		this.airportDeparture = airportDeparture;
 		this.airportArrival = airportArrival;

@@ -40,6 +40,10 @@ public class Factory {
 		return new FlightDuration();
 	}
 
+	public static FlightDuration createFlightDuration(Airport airportDeparture, Airport airportArrival) {
+		return new FlightDuration(airportDeparture, airportArrival);
+	}
+
 	public static FlightDuration createFlightDuration(Airport airportDeparture, Airport airportArrival, int duration) {
 		return new FlightDuration(airportDeparture, airportArrival, duration);
 	}
