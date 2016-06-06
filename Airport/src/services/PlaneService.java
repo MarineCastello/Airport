@@ -41,9 +41,10 @@ public class PlaneService {
 	}
 
 	/**
-	 * Récupère les informations des avions en base de données sous forme d'un String
+	 * Récupère les informations des avions en base de données sous forme d'un
+	 * String
 	 * 
-	 * @return
+	 * @return une liste de String contenant les informations des avions
 	 * @throws MyDBException
 	 */
 	public List<String> selectAll() throws MyDBException {
@@ -59,6 +60,14 @@ public class PlaneService {
 		return PlaneDAO.getInstance().selectPlane(planeName);
 	}
 
+	/**
+	 * Récupère la liste des avions disponibles dans un aéroport donné
+	 * 
+	 * @param airportName
+	 *            l'aéroport sur lequel on fait la recherche
+	 * @return la liste des avions disponibles dans l'aéroport
+	 * @throws MyDBException
+	 */
 	public List<String> selectAvailablePlanes(String airportName) throws MyDBException {
 		List<Plane> listPlanes = PlaneDAO.getInstance().selectAvailablePlanes(airportName);
 		List<String> listResult = new ArrayList<String>();
