@@ -1,9 +1,6 @@
 package services;
 
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
-
 import dbAccess.FlightPlanDAO;
 import dbAccess.MyDBException;
 import entity.Airport;
