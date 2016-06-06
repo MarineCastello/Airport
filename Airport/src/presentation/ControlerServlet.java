@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import entity.Plane;
 import services.PlaneService;
 
 /**
@@ -46,9 +45,9 @@ public class ControlerServlet extends HttpServlet {
 	}
 
 	public void doWork(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (request.getParameter("DYNAMICLIST") != null) {
+		if (request.getParameter("DYNAMICLISTUSER") != null) {
 
-			switch (request.getParameter("DYNAMICLIST")) {
+			switch (request.getParameter("DYNAMICLISTUSER")) {
 			case "1":
 				getListPlaneByAirport(request, response);
 				break;
@@ -65,8 +64,36 @@ public class ControlerServlet extends HttpServlet {
 				break;
 			}
 		}
-		
+
+//		if (request.getParameter("DYNAMICLISTADMIN") != null) {
+//
+//			switch (request.getParameter("DYNAMICLISTADMIN")) {
+//			case "1":
+//				addPlane(request, response);
+//				break;
+//
+//			case "2":
+//				addPlane(request, response);
+//				break;
+//
+//			case "3":
+//				addAirlineCompany(request, response);
+//				break;
+//
+//			case "4":
+//				addFlightPlan(request, response);
+//				break;
+//
+//			default:
+//				break;
+//			}
+//		}
+
 	}
+
+	// =======================================================================================
+	//											 User
+	// =======================================================================================
 
 	public void getListPlaneByAirport(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -134,4 +161,43 @@ public class ControlerServlet extends HttpServlet {
 		request.setAttribute("beanPlane", beanPlane);
 		request.getRequestDispatcher("/vueSelectedPlane.jsp").forward(request, response);
 	}
+
+	// =======================================================================================
+	//										 Administrator
+	// =======================================================================================
+
+//	public void addAirport(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//		ModelBeanAddAirport beanAddAirport = new ModelBeanAddAirport("");
+//
+//		if (request.getParameter("AIRPORTNAME") != null) {
+//			String airportName = "";
+//			
+//			try {
+//				String planeName = request.getParameter("PLANEID");
+//
+//				// metier
+//				PlaneService planeService = PlaneService.getInstance();
+//				String plane = planeService.selectPlane(planeName);
+//				beanPlane = new ModelBeanPlane(plane);
+//			} catch (Exception e) {
+//				System.out.println("Erreur lors de la recuperation du bean 'Plane'");
+//			}
+//		}
+//
+//		// Passage a la vueListPlaneInAirport.jsp
+//		request.setAttribute("beanPlane", beanPlane);
+//		request.getRequestDispatcher("/vueSelectedPlane.jsp").forward(request, response);
+//	}
+//
+//	public void addPlane(HttpServletRequest request, HttpServletResponse response) {
+//
+//	}
+//
+//	public void addAirlineCompany(HttpServletRequest request, HttpServletResponse response) {
+//
+//	}
+//
+//	public void addFlightPlan(HttpServletRequest request, HttpServletResponse response) {
+//
+//	}
 }

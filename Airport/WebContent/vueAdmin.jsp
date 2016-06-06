@@ -12,7 +12,7 @@
 		<h1 id="title">Administrator</h1>
 		<form action="ControlerServlet" method="post" id="formulaire">
 			<div id="divDynamicList">
-				<select name="DYNAMICLIST" id="dynamicList" onchange="selectChange();">
+				<select name="DYNAMICLISTADMIN" id="dynamicList" onchange="selectChange();">
 					<option value="0" class="elmtFilter">Choisir une action</option>
 					<option value="1" class="elmtFilter">Ajouter un aéroport</option>
 					<option value="2" class="elmtFilter">Ajouter un avion</option>

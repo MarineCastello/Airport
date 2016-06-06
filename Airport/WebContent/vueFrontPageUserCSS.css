@@ -63,7 +63,7 @@ body
 .champsForm
 {
 	font-family: "Calibri";
-	display: flex;
+	display: none;
 	font-weight: bold;
 }
 

@@ -2,8 +2,6 @@ package presentation;
 
 import java.util.List;
 
-import entity.Plane;
-
 public class ModelBeanPlaneInAirport {
 	private String airport;
 	private List<String> lstPlane;
