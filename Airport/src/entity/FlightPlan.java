@@ -1,17 +1,18 @@
 package entity;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class FlightPlan {
 
 	private Plane plane;
 	private FlightDuration duration;
-	private Date departureTime;
+	private Date departureTime; //La date est une date SQL et non Java
 
 	FlightPlan() {
 		this.plane = Factory.createPlane();
 		this.duration = Factory.createFlightDuration();
-		this.departureTime = new Date();
+		java.util.Date date = new java.util.Date();
+		this.departureTime = (java.sql.Date) date;
 	}
 
 	FlightPlan(Plane plane, FlightDuration duration, Date departureTime) {
