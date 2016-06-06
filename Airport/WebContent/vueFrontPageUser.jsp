@@ -10,24 +10,26 @@
 </head>
 <body>
 	<div id="container">
+		<h1 id="title">Recherche Ultime</h1>
 		<form action="ControlerServlet" method="post" id="formulaire">
 			<div id="divDynamicList">
-				<select name="DYNAMICLIST" id="dynamicList" onchange="">
+				<select name="DYNAMICLIST" id="dynamicList" onchange="selectChange();">
 					<option value="0" class="elmtFilter">Choisir une action</option>
 					<option value="1" class="elmtFilter">Avions disponibles dans un aéroport donné</option>
 					<option value="2" class="elmtFilter">Avions en vol</option>
+					<option value="3" class="elmtFilter">Recherche d'un avion</option>
 				</select>
 			</div>
-			<div class="champsForm">
+			<div class="champsForm" id="departAirport">
 				<div class="divForm">Aeroport de depart</div><input type="text" name="DEPARTAIRPORT" placeholder="Aeroport de depart" class="textBoxForm"/>
 			</div>
-			<div class="champsForm">
+			<div class="champsForm" id="arrivalAirport">
 				<div class="divForm">Aeroport d'arrivee</div><input type="text" name="ARRIVALAIRPORT" placeholder="Aeroport d'arrivee" class="textBoxForm"/>
 			</div>
-			<div class="champsForm">
+			<div class="champsForm" id="planeID">
 				<div class="divForm">Matricule de l'avion</div><input type="text" name="PLANEID" placeholder="Matricule de l'avion" class="textBoxForm"/>
 			</div>
-			<div class="champsForm">
+			<div id="researchButton">
 			<input type="submit" value="Rechercher" class="button"/>
 			</div>
 		</form>

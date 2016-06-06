@@ -1,6 +1,73 @@
 @CHARSET "ISO-8859-1";
 
+body
+{
+	font-family: "Calibri";
+	background-color: #BDBDBD;
+}
+
+#container
+{
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: center;
+	background-color: #B40404;
+	padding-bottom: 30px;
+	border-radius: 20px 20px;
+}
+
+#title
+{
+	color: #E6E6E6;
+}
+
+#formulaire
+{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding: 5px;
+	border: black 2px solid;
+	border-radius: 10px 10px;
+	background-color: #BDBDBD;
+}
+
+#dynamicList
+{
+	border: black 1px solid;
+	border-radius: 10px 10px;
+	font-family: "Calibri";
+	font-weight: bold;
+	margin-bottom: 10px;
+}
+
+.textBoxForm
+{
+	border: black 1px solid;
+	border-radius: 10px 10px;
+	text-align: center;
+}
+
+.button
+{
+	border: black 1px solid;
+	border-radius: 10px 10px;
+	font-weight: bold;
+	font-family: "Calibri";
+	font-size: 1.2em;
+	margin-top: 10px;
+}
+
 .champsForm
+{
+	font-family: "Calibri";
+	display: flex;
+	font-weight: bold;
+}
+
+#researchButton
 {
 	font-family: "Calibri";
 	display: flex;
