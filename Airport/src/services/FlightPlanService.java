@@ -63,11 +63,17 @@ public class FlightPlanService {
 	}
 
 	/**
-	 * Affichage du plan de vol d'un avion entre deux aéroports à une date donnée
-	 * @param planeName nom de l'avion
-	 * @param airportDeparture aéroport de départ
-	 * @param airportArrival aéroport d'arrivée
-	 * @param date date de départ
+	 * Affichage du plan de vol d'un avion entre deux aéroports à une date
+	 * donnée
+	 * 
+	 * @param planeName
+	 *            nom de l'avion
+	 * @param airportDeparture
+	 *            aéroport de départ
+	 * @param airportArrival
+	 *            aéroport d'arrivée
+	 * @param date
+	 *            date de départ
 	 * @return le plan de vol de l'avion
 	 * @throws MyDBException
 	 */
@@ -77,39 +83,79 @@ public class FlightPlanService {
 				date);
 		return fp.toString();
 	}
-	
+
 	/**
 	 * Affiche la liste des vols au départ d'un aéroport
-	 * @param airportName nom de l'aéroport de départ
-	 * @return la liste des plans de vol
-	 * @throws MyDBException 
-	 */
-	public List<String> selectFlightsFromAirport(String airportName) throws MyDBException{
-		List<String> listResult = new ArrayList<String>();
-		List<FlightPlan> listFlightPlans = FlightPlanDAO.getInstance().selectFlightFromAirport(airportName);
-		for(FlightPlan fp : listFlightPlans){
-			listResult.add(fp.toString());
-		}
-		return listResult;
-	}
-	
-	/**
-	 * Affiche la liste des vols qui arrivent dans un aéroport
-	 * @param airportName nom de l'aéroport d'arrivée
+	 * 
+	 * @param airportName
+	 *            nom de l'aéroport de départ
 	 * @return la liste des plans de vol
 	 * @throws MyDBException
 	 */
-	public List<String> selectFlightsToAirport(String airportName) throws MyDBException{
+	public List<String> selectFlightsFromAirport(String airportName) throws MyDBException {
 		List<String> listResult = new ArrayList<String>();
-		List<FlightPlan> listFlightPlans = FlightPlanDAO.getInstance().selectFlightToAirport(airportName);
-		for(FlightPlan fp : listFlightPlans){
+		List<FlightPlan> listFlightPlans = FlightPlanDAO.getInstance().selectFlightFromAirport(airportName);
+		for (FlightPlan fp : listFlightPlans) {
 			listResult.add(fp.toString());
 		}
 		return listResult;
 	}
-	
-	
-	
-	
+
+	/**
+	 * Affiche la liste des vols qui arrivent dans un aéroport
+	 * 
+	 * @param airportName
+	 *            nom de l'aéroport d'arrivée
+	 * @return la liste des plans de vol
+	 * @throws MyDBException
+	 */
+	public List<String> selectFlightsToAirport(String airportName) throws MyDBException {
+		List<String> listResult = new ArrayList<String>();
+		List<FlightPlan> listFlightPlans = FlightPlanDAO.getInstance().selectFlightToAirport(airportName);
+		for (FlightPlan fp : listFlightPlans) {
+			listResult.add(fp.toString());
+		}
+		return listResult;
+	}
+
+	/**
+	 * Affiche la liste des vols entre deux aéroports
+	 * 
+	 * @param airportDepartureName
+	 *            nom de l'aéroport de départ
+	 * @param airportArrivalName
+	 *            nom de l'aéroport d'arrivée
+	 * @return la liste des plans de vol
+	 * @throws MyDBException
+	 */
+	public List<String> selectFlightBetweenAirports(String airportDepartureName, String airportArrivalName)
+			throws MyDBException {
+		List<String> listResult = new ArrayList<String>();
+		List<FlightPlan> listFlightPlans = FlightPlanDAO.getInstance().selectFlightBetweenAirports(airportDepartureName,
+				airportArrivalName);
+		for (FlightPlan fp : listFlightPlans) {
+			listResult.add(fp.toString());
+		}
+		return listResult;
+	}
+
+	/**
+	 * Recherche les vols dans un intervalle de temps
+	 * 
+	 * @param date1
+	 *            date de début
+	 * @param date2
+	 *            date de fin
+	 * @return la liste des plans de vol
+	 * @throws MyDBException
+	 */
+	public List<String> selectFlightIntoTimeInterval(Date date1, Date date2) throws MyDBException {
+		List<String> listResult = new ArrayList<String>();
+		List<FlightPlan> listFlightPlans = FlightPlanDAO.getInstance().selectFlightIntoTimeInterval(date1, date2);
+		for (FlightPlan fp : listFlightPlans) {
+			listResult.add(fp.toString());
+		}
+		return listResult;
+	}
 
 }
