@@ -39,8 +39,10 @@ public class PlaneService {
 		PlaneDAO.getInstance().updatePlaneAirline(p, a);
 	}
 
-	public void insertPlane(String planeName, Airport currentAirport, Airline airline, boolean available)
+	public void insertPlane(String planeName, String currentAirportName, String airlineName, boolean available)
 			throws MyDBException {
+		Airport currentAirport = Factory.createAirport(currentAirportName);
+		Airline airline = Factory.createAirline(airlineName);
 		Plane p = Factory.createPlane(planeName, currentAirport, airline, available);
 		PlaneDAO.getInstance().insertPlane(p);
 		// On ne vérifie pas si un avion existe avant de l'insérer en BD
