@@ -33,6 +33,12 @@ public class PlaneService {
 		PlaneDAO.getInstance().updateCurrentAirport(p, a);
 	}
 
+	public void updatePlaneAirline(String planeName, String airlineName) throws MyDBException {
+		Plane p = Factory.createPlane(planeName);
+		Airline a = Factory.createAirline(airlineName);
+		PlaneDAO.getInstance().updatePlaneAirline(p, a);
+	}
+
 	public void insertPlane(String planeName, Airport currentAirport, Airline airline, boolean available)
 			throws MyDBException {
 		Plane p = Factory.createPlane(planeName, currentAirport, airline, available);
@@ -56,8 +62,8 @@ public class PlaneService {
 		return listResult;
 	}
 
-	public Plane selectPlane(String planeName) throws MyDBException {
-		return PlaneDAO.getInstance().selectPlane(planeName);
+	public String selectPlane(String planeName) throws MyDBException {
+		return PlaneDAO.getInstance().selectPlane(planeName).toString();
 	}
 
 	/**
@@ -75,6 +81,10 @@ public class PlaneService {
 			listResult.add(p.toString());
 		}
 		return listResult;
+	}
+
+	public List<String> selectPlanesInFlight() throws MyDBException {
+		return PlaneDAO.getInstance().selectPlanesInFlight();
 	}
 
 }
