@@ -180,4 +180,47 @@ public class AirportDAO {
 
 		return idAirport;
 	}
+	
+	public Integer selectTimeZoneAirport(String airport) throws MyDBException {
+		// récupération de l'idAirport
+		Integer timezone = 0;
+		ResultSet resultat = null;
+		String requete = "SELECT time_zone FROM airport WHERE airport_name = ?;";
+		PreparedStatement preparedStmt = null;
+
+		// connexion à la base de données
+		getConnection();
+		// envoi de la requete
+		try {
+			preparedStmt = dbaccess.getConnection().prepareStatement(requete);
+			preparedStmt.setString(1, airport);
+			resultat = preparedStmt.executeQuery();
+		} catch (SQLException e1) {
+			throw new MyDBException("Erreur lors de la création ou de l'exécution da la requete de selection");
+		}
+
+		// traitement des résultats
+		try {
+			if (resultat.next()) {
+				timezone = resultat.getInt("id_airport");
+			}
+		} catch (SQLException e) {
+			throw new MyDBException("Erreur lors de la récupération des données du select");
+		}
+
+		// fermeture du ResultSet ainsi que de la connexion
+		try {
+			preparedStmt.close();
+		} catch (SQLException e1) {
+			throw new MyDBException("Erreur lors de la fermeture du statement de selection");
+		}
+		try {
+			resultat.close();
+		} catch (SQLException e) {
+			throw new MyDBException("Erreur lors de la fermeture du ResultSet");
+		}
+		close();
+
+		return timezone;
+	}
 }
