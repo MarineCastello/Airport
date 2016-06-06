@@ -70,35 +70,33 @@ public class PlaneDAO {
 	 * @return nombre d'enregistrements impactés
 	 * @throws MyDBException
 	 */
-	public Integer insertPlane(Plane p) throws MyDBException {
-		Integer nbMaj = 0;
-
+	public void insertPlane(Plane p) throws MyDBException {
 		// récupération de l'id de l'airline
 		Integer idAirline = AirlineDAO.getInstance().selectIdAirline(p.getAirline().getAirlineName());
-		
+
 		// Récupération de l'id de l'aéroport
 		Integer idAirport = AirportDAO.getInstance().selectIdAirport(p.getCurrentAirport().getAirportName());
-		
+
 		// ajout de l'avion avec le bon id_airline et le bon id_airport
-		String requete = "INSERT INTO plane (plane_name,id_airline, id_airport) VALUES ('" + p.getPlaneName() + "', "
-				+ idAirline + ", " + idAirport + ")";
-		Statement stmt = null;
+		String requete = "INSERT INTO plane (plane_name,id_airline, id_airport) VALUES (?, ?, ?);";
+		PreparedStatement preparedStmt = null;
 
 		getConnection();
 		try {
-			stmt = dbaccess.getConnection().createStatement();
-			nbMaj = stmt.executeUpdate(requete);
+			preparedStmt = dbaccess.getConnection().prepareStatement(requete);
+			preparedStmt.setString(1, p.getPlaneName());
+			preparedStmt.setInt(2, idAirline);
+			preparedStmt.setInt(3, idAirport);
+			preparedStmt.executeUpdate();
 		} catch (SQLException e) {
 			throw new MyDBException("Probleme lors de la creation ou de l'exécution de la requete d'insertion");
 		}
 		try {
-			stmt.close();
+			preparedStmt.close();
 		} catch (SQLException e) {
 			throw new MyDBException("Erreur lors du close du statement de l'insertion");
 		}
 		close();
-
-		return nbMaj;
 	}
 
 	/**
@@ -111,7 +109,7 @@ public class PlaneDAO {
 		List<Plane> lstPlanes = new ArrayList<Plane>();
 		String requete = "SELECT * " + "FROM plane P " + "INNER JOIN airport A ON P.fk_id_airport = A.id_airport "
 				+ "INNER JOIN airline Ai ON P.fk_id_airline = Ai.id_airline;";
-		Statement stmt = null;
+		PreparedStatement preparedStmt = null;
 		Airline airline = null;
 		Airport airport = null;
 
@@ -119,8 +117,8 @@ public class PlaneDAO {
 		getConnection();
 		// envoi de la requete
 		try {
-			stmt = dbaccess.getConnection().createStatement();
-			resultats = stmt.executeQuery(requete);
+			preparedStmt = dbaccess.getConnection().prepareStatement(requete);
+			resultats = preparedStmt.executeQuery();
 		} catch (SQLException e1) {
 			throw new MyDBException("Erreur lors de la création ou de l'exécution da la requete de selection");
 		}
@@ -147,7 +145,7 @@ public class PlaneDAO {
 
 		// fermeture du ResultSet ainsi que de la connexion
 		try {
-			stmt.close();
+			preparedStmt.close();
 		} catch (SQLException e1) {
 			throw new MyDBException("Erreur lors de la fermeture du statement de selection");
 		}
@@ -174,8 +172,8 @@ public class PlaneDAO {
 		ResultSet resultat = null;
 		String requete = "SELECT * "
 				+ "FROM plane P INNER JOIN airline A ON P.fk_id_airline = A.id_airline INNER JOIN airport Ai ON P.fk_id_airport = Ai.id_airport "
-				+ "WHERE plane_name = " + name + ";";
-		Statement stmt = null;
+				+ "WHERE plane_name = ?;";
+		PreparedStatement preparedStmt = null;
 		Airline airline = null;
 		Airport airport = null;
 
@@ -183,8 +181,9 @@ public class PlaneDAO {
 		getConnection();
 		// envoi de la requete
 		try {
-			stmt = dbaccess.getConnection().createStatement();
-			resultat = stmt.executeQuery(requete);
+			preparedStmt = dbaccess.getConnection().prepareStatement(requete);
+			preparedStmt.setString(1, name);
+			resultat = preparedStmt.executeQuery();
 		} catch (SQLException e1) {
 			throw new MyDBException("Erreur lors de la création ou de l'exécution da la requete de selection");
 		}
@@ -214,7 +213,7 @@ public class PlaneDAO {
 
 		// fermeture du ResultSet ainsi que de la connexion
 		try {
-			stmt.close();
+			preparedStmt.close();
 		} catch (SQLException e1) {
 			throw new MyDBException("Erreur lors de la fermeture du statement de selection");
 		}
@@ -262,7 +261,7 @@ public class PlaneDAO {
 
 		// traitement des résultats
 		try {
-			if (resultat.next()) {
+			while (resultat.next()) {
 				int av = resultat.getInt("available");
 				boolean available;
 				if (av == 1) {
@@ -362,7 +361,7 @@ public class PlaneDAO {
 			throw new MyDBException("Erreur lors de l'interruption de la connection à la DB");
 		}
 	}
-	
+
 	public void updateCurrentAirport(Plane p, Airport a) throws MyDBException {
 		ResultSet resultat = null;
 
@@ -414,14 +413,53 @@ public class PlaneDAO {
 		}
 
 		// Fermeture des resultSet, preparedStatement et Connection
-		try
-
-		{
+		try {
 			resultat.close();
 			preparedStmt.close();
 			close();
 		} catch (SQLException e1) {
 			throw new MyDBException("Erreur lors de l'interruption de la connection à la DB");
 		}
+	}
+	
+	public List<String> selectPlanesInFlight() throws MyDBException {
+		List<String> lstPlanes = new ArrayList<String>();
+		ResultSet resultats = null;
+		String requete = "SELECT plane_name FROM rechercheultime.plane WHERE available = 0;";
+		PreparedStatement preparedStmt = null;
+
+		// connexion à la base de données
+		getConnection();
+		// envoi de la requete
+		try {
+			preparedStmt = dbaccess.getConnection().prepareStatement(requete);
+			resultats = preparedStmt.executeQuery();
+		} catch (SQLException e1) {
+			throw new MyDBException("Erreur lors de la création ou de l'exécution da la requete de selection");
+		}
+
+		// traitement des résultats
+		try {
+			while (resultats.next()) {
+				lstPlanes.add(resultats.getString("plane_name"));
+			}
+		} catch (SQLException e) {
+			throw new MyDBException("Erreur lors de la récupération des données du select");
+		}
+
+		// fermeture du ResultSet ainsi que de la connexion
+		try {
+			preparedStmt.close();
+		} catch (SQLException e1) {
+			throw new MyDBException("Erreur lors de la fermeture du statement de selection");
+		}
+		try {
+			resultats.close();
+		} catch (SQLException e) {
+			throw new MyDBException("Erreur lors de la fermeture du ResultSet");
+		}
+		close();
+
+		return lstPlanes;
 	}
 }
