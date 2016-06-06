@@ -6,6 +6,7 @@ import java.util.List;
 
 import dbAccess.FlightPlanDAO;
 import dbAccess.MyDBException;
+import dbAccess.PlaneDAO;
 import entity.Airport;
 import entity.Factory;
 import entity.FlightDuration;
@@ -40,6 +41,7 @@ public class FlightPlanService {
 	public void insertFlightPlan(String planeName, String airportDepartureName, String airportArrivalName,
 			Date departureTime) throws MyDBException {
 		Plane p = Factory.createPlane(planeName);
+		PlaneDAO.getInstance().updateAvailability(p); //L'avion devient indisponible
 		Airport aDepart = Factory.createAirport(airportDepartureName);
 		Airport aArrivee = Factory.createAirport(airportArrivalName);
 		FlightDuration fd = Factory.createFlightDuration(aDepart, aArrivee);
