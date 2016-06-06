@@ -1,0 +1,24 @@
+@CHARSET "ISO-8859-1";
+
+.champsForm
+{
+	font-family: "Calibri";
+	display: flex;
+}
+
+.divForm
+{
+	width: 200px;
+	margin: 2px;
+}
+
+.textBoxForm
+{
+	margin: 2px;
+}
+
+#formulaire
+{
+	display: flex;
+	flex-direction: column;
+}
