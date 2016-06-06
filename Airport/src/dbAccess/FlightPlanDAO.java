@@ -1,17 +1,18 @@
 package dbAccess;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import entity.FlightPlan;
-import entity.Plane;
 import entity.Airline;
 import entity.Airport;
 import entity.Factory;
 import entity.FlightDuration;
+import entity.FlightPlan;
+import entity.Plane;
 
 public class FlightPlanDAO {
 	private DBAccess dbaccess = null;
@@ -158,5 +159,185 @@ public class FlightPlanDAO {
 		close();
 
 		return lstFlightPlans;
+	}
+	
+	public FlightPlan selectFlightPlanOfPlane(String planeName, String airportDeparture, String airportArrival, Date date) throws MyDBException {
+		FlightPlan fp = null;
+		
+		// récupération de l'id de l'aéroport de départ
+		Integer idAirportDeparture = PlaneDAO.getInstance().selectIdPlane(airportDeparture);
+		
+		// récupération de l'id de l'aéroport d'arrivée
+		Integer idAirportArrival = PlaneDAO.getInstance().selectIdPlane(airportArrival);
+		
+		ResultSet resultats = null;
+		String requete = "SELECT P.plane_name, A.airline_name, Ai1.airport_name AS airport_departure, Ai2.airport_name AS airport_arrival, FD.duration, FP.departure_time" 
+					   + "FROM rechercheultime.flight_plan FP"
+					   + "INNER JOIN rechercheultime.plane P ON FP.fk_id_plane = P.id_plane"
+					   + "INNER JOIN rechercheultime.flight_duration FD ON FP.fk_id_flight_duration  = FD.id_flight_duration"    
+					   + "INNER JOIN rechercheultime.airline A ON P.fk_id_airline = A.id_airline"
+					   + "INNER JOIN rechercheultime.airport Ai1 ON FD.fk_id_airport_departure = Ai1.id_airport"
+					   + "INNER JOIN rechercheultime.airport Ai2 ON FD.fk_id_airport_arrival = Ai2.id_airport"
+					   + "WHERE Ai1.id_airport = ? AND Ai2.id_airport = ? AND P.plane_name = ?;";
+		PreparedStatement preparedStmt = null;
+
+		// connexion à la base de données
+		getConnection();
+		// envoi de la requete
+		try {
+			preparedStmt = dbaccess.getConnection().prepareStatement(requete);
+			preparedStmt.setInt(1, idAirportDeparture);
+			preparedStmt.setInt(2, idAirportArrival);
+			preparedStmt.setString(3, planeName);
+			resultats = preparedStmt.executeQuery();
+		} catch (SQLException e1) {
+			throw new MyDBException("Erreur lors de la création ou de l'exécution da la requete de selection");
+		}
+
+		// traitement des résultats
+		try {
+			if (resultats.next()) {
+				Airline airline = Factory.createAirline(resultats.getString("airline_name"));
+				Plane p = Factory.createPlane(resultats.getString("plane_name"));
+				p.setAirline(airline);
+				Airport airportD = Factory.createAirport(resultats.getString("airport_departure"));
+				Airport airportA = Factory.createAirport(resultats.getString("airport_arrival"));
+				FlightDuration fd = Factory.createFlightDuration(airportD, airportA, resultats.getInt("duration"));
+				fp = Factory.createFlightPlan(p, fd, resultats.getDate("departure_time"));
+			}
+		} catch (SQLException e) {
+			throw new MyDBException("Erreur lors de la récupération des données du select");
+		}
+
+		// fermeture du ResultSet ainsi que de la connexion
+		try {
+			preparedStmt.close();
+		} catch (SQLException e1) {
+			throw new MyDBException("Erreur lors de la fermeture du statement de selection");
+		}
+		try {
+			resultats.close();
+		} catch (SQLException e) {
+			throw new MyDBException("Erreur lors de la fermeture du ResultSet");
+		}
+		close();
+
+		return fp;
+	}
+	
+	public List<FlightPlan> selectFlightFromAirport(String airport) throws MyDBException {
+		List<FlightPlan> lstFlightPlan = new ArrayList<FlightPlan>();
+		
+		ResultSet resultats = null;
+		List<FlightPlan> lstFlightPlans = new ArrayList<FlightPlan>();
+		String requete = "SELECT P.plane_name, A.airline_name, Ai1.airport_name AS airport_departure, Ai2.airport_name AS airport_arrival, FD.duration, FP.departure_time" 
+					   + "FROM rechercheultime.flight_plan FP"
+					   + "INNER JOIN rechercheultime.plane P ON FP.fk_id_plane = P.id_plane"
+					   + "INNER JOIN rechercheultime.flight_duration FD ON FP.fk_id_flight_duration  = FD.id_flight_duration"    
+					   + "INNER JOIN rechercheultime.airline A ON P.fk_id_airline = A.id_airline"
+					   + "INNER JOIN rechercheultime.airport Ai1 ON FD.fk_id_airport_departure = Ai1.id_airport"
+					   + "INNER JOIN rechercheultime.airport Ai2 ON FD.fk_id_airport_arrival = Ai2.id_airport"
+					   + "WHERE Ai1.airport_name = ?;";
+		PreparedStatement preparedStmt = null;
+
+		// connexion à la base de données
+		getConnection();
+		// envoi de la requete
+		try {
+			preparedStmt = dbaccess.getConnection().prepareStatement(requete);
+			preparedStmt.setString(1, airport);
+			resultats = preparedStmt.executeQuery();
+		} catch (SQLException e1) {
+			throw new MyDBException("Erreur lors de la création ou de l'exécution da la requete de selection");
+		}
+
+		// traitement des résultats
+		try {
+			while (resultats.next()) {
+				Airline airline = Factory.createAirline(resultats.getString("airline_name"));
+				Plane p = Factory.createPlane(resultats.getString("plane_name"));
+				p.setAirline(airline);
+				Airport airportDeparture = Factory.createAirport(resultats.getString("airport_departure"));
+				Airport airportArrival = Factory.createAirport(resultats.getString("airport_arrival"));
+				FlightDuration fd = Factory.createFlightDuration(airportDeparture, airportArrival, resultats.getInt("duration"));
+				FlightPlan a = Factory.createFlightPlan(p, fd, resultats.getDate("departure_time"));
+				lstFlightPlans.add(a);
+			}
+		} catch (SQLException e) {
+			throw new MyDBException("Erreur lors de la récupération des données du select");
+		}
+
+		// fermeture du ResultSet ainsi que de la connexion
+		try {
+			preparedStmt.close();
+		} catch (SQLException e1) {
+			throw new MyDBException("Erreur lors de la fermeture du statement de selection");
+		}
+		try {
+			resultats.close();
+		} catch (SQLException e) {
+			throw new MyDBException("Erreur lors de la fermeture du ResultSet");
+		}
+		close();
+		
+		return lstFlightPlan;
+	}
+	
+	public List<FlightPlan> selectFlightToAirport(String airport) throws MyDBException {
+		List<FlightPlan> lstFlightPlan = new ArrayList<FlightPlan>();
+		
+		ResultSet resultats = null;
+		List<FlightPlan> lstFlightPlans = new ArrayList<FlightPlan>();
+		String requete = "SELECT P.plane_name, A.airline_name, Ai1.airport_name AS airport_departure, Ai2.airport_name AS airport_arrival, FD.duration, FP.departure_time" 
+					   + "FROM rechercheultime.flight_plan FP"
+					   + "INNER JOIN rechercheultime.plane P ON FP.fk_id_plane = P.id_plane"
+					   + "INNER JOIN rechercheultime.flight_duration FD ON FP.fk_id_flight_duration  = FD.id_flight_duration"    
+					   + "INNER JOIN rechercheultime.airline A ON P.fk_id_airline = A.id_airline"
+					   + "INNER JOIN rechercheultime.airport Ai1 ON FD.fk_id_airport_departure = Ai1.id_airport"
+					   + "INNER JOIN rechercheultime.airport Ai2 ON FD.fk_id_airport_arrival = Ai2.id_airport"
+					   + "WHERE Ai2.airport_name = ?;";
+		PreparedStatement preparedStmt = null;
+
+		// connexion à la base de données
+		getConnection();
+		// envoi de la requete
+		try {
+			preparedStmt = dbaccess.getConnection().prepareStatement(requete);
+			preparedStmt.setString(1, airport);
+			resultats = preparedStmt.executeQuery();
+		} catch (SQLException e1) {
+			throw new MyDBException("Erreur lors de la création ou de l'exécution da la requete de selection");
+		}
+
+		// traitement des résultats
+		try {
+			while (resultats.next()) {
+				Airline airline = Factory.createAirline(resultats.getString("airline_name"));
+				Plane p = Factory.createPlane(resultats.getString("plane_name"));
+				p.setAirline(airline);
+				Airport airportDeparture = Factory.createAirport(resultats.getString("airport_departure"));
+				Airport airportArrival = Factory.createAirport(resultats.getString("airport_arrival"));
+				FlightDuration fd = Factory.createFlightDuration(airportDeparture, airportArrival, resultats.getInt("duration"));
+				FlightPlan a = Factory.createFlightPlan(p, fd, resultats.getDate("departure_time"));
+				lstFlightPlans.add(a);
+			}
+		} catch (SQLException e) {
+			throw new MyDBException("Erreur lors de la récupération des données du select");
+		}
+
+		// fermeture du ResultSet ainsi que de la connexion
+		try {
+			preparedStmt.close();
+		} catch (SQLException e1) {
+			throw new MyDBException("Erreur lors de la fermeture du statement de selection");
+		}
+		try {
+			resultats.close();
+		} catch (SQLException e) {
+			throw new MyDBException("Erreur lors de la fermeture du ResultSet");
+		}
+		close();
+		
+		return lstFlightPlan;
 	}
 }
