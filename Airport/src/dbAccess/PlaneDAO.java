@@ -77,7 +77,7 @@ public class PlaneDAO {
 		Integer idAirport = AirportDAO.getInstance().selectIdAirport(p.getCurrentAirport().getAirportName());
 
 		// ajout de l'avion avec le bon id_airline et le bon id_airport
-		String requete = "INSERT INTO plane (plane_name,id_airline, id_airport) VALUES (?, ?, ?);";
+		String requete = "INSERT INTO plane (plane_name,id_airline, id_airport, available) VALUES (?, ?, ?, ?);";
 		PreparedStatement preparedStmt = null;
 
 		getConnection();
@@ -86,6 +86,7 @@ public class PlaneDAO {
 			preparedStmt.setString(1, p.getPlaneName());
 			preparedStmt.setInt(2, idAirline);
 			preparedStmt.setInt(3, idAirport);
+			preparedStmt.setInt(4, p.getAvailable());
 			preparedStmt.executeUpdate();
 		} catch (SQLException e) {
 			throw new MyDBException("Probleme lors de la creation ou de l'exécution de la requete d'insertion");
@@ -125,17 +126,10 @@ public class PlaneDAO {
 		// traitement des résultats
 		try {
 			while (resultats.next()) {
-				int av = resultats.getInt("available");
-				boolean available;
-				if (av == 1) {
-					available = true;
-				} else {
-					available = false;
-				}
 				airline = Factory.createAirline(resultats.getString("airline_name"));
 				airport = Factory.createAirport();
 				airport.setAirportName(resultats.getString("airport_name"));
-				Plane p = Factory.createPlane(resultats.getString("plane_name"), airport, airline, available);
+				Plane p = Factory.createPlane(resultats.getString("plane_name"), airport, airline, resultats.getInt("available"));
 				lstPlanes.add(p);
 			}
 		} catch (SQLException e) {
@@ -190,17 +184,10 @@ public class PlaneDAO {
 		// traitement des résultats
 		try {
 			if (resultat.next()) {
-				int av = resultat.getInt("available");
-				boolean available;
-				if (av == 1) {
-					available = true;
-				} else {
-					available = false;
-				}
 				airline = Factory.createAirline(resultat.getString("airline_name"));
 				airport = Factory.createAirport();
 				airport.setAirportName(resultat.getString("airport_name"));
-				p = Factory.createPlane(resultat.getString("plane_name"), airport, airline, available);
+				p = Factory.createPlane(resultat.getString("plane_name"), airport, airline, resultat.getInt("available"));
 			}
 		} catch (SQLException e) {
 			throw new MyDBException("Erreur lors de la récupération des données du select");
@@ -261,18 +248,11 @@ public class PlaneDAO {
 		// traitement des résultats
 		try {
 			while (resultat.next()) {
-				int av = resultat.getInt("available");
-				boolean available;
-				if (av == 1) {
-					available = true;
-				} else {
-					available = false;
-				}
 				airline = Factory.createAirline(resultat.getString("airline_name"));
 				airport = Factory.createAirport(resultat.getString("airport_name"), resultat.getString("city"),
 						resultat.getString("country"), resultat.getInt("time_zone"));
 				airport.setAirportName(resultat.getString("airport_name"));
-				p = Factory.createPlane(resultat.getString("plane_name"), airport, airline, available);
+				p = Factory.createPlane(resultat.getString("plane_name"), airport, airline, resultat.getInt("available"));
 				lstPlanes.add(p);
 			}
 		} catch (SQLException e) {
