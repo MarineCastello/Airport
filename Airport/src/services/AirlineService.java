@@ -40,11 +40,4 @@ public class AirlineService {
 		return listResult;
 	}
 
-	/*
-	 * public void updateAirline(String airlineName) {
-	 * Airline a = Factory.createAirline(airlineName);
-	 * AirlineDAO.getInstance().updateAirline(a);
-	 * }
-	 */
-
 }

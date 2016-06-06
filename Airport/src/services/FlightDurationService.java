@@ -3,6 +3,7 @@ package services;
 import java.util.ArrayList;
 import java.util.List;
 
+import dbAccess.AirportDAO;
 import dbAccess.FlightDurationDAO;
 import dbAccess.MyDBException;
 import entity.Airport;
@@ -53,6 +54,22 @@ public class FlightDurationService {
 			listResult.add(fd.toString());
 		}
 		return listResult;
+	}
+
+	/**
+	 * Affiche le décalage horaire entre 2 aéroports
+	 * 
+	 * @param airportDepartureName
+	 *            nom de l'aéroport de départ
+	 * @param airportArrivalName
+	 *            nom de l'aéroport d'arrivée
+	 * @return la décalage horaire
+	 * @throws MyDBException
+	 */
+	public int getTimeDifference(String airportDepartureName, String airportArrivalName) throws MyDBException {
+		int timezone1 = AirportDAO.getInstance().selectTimeZoneAirport(airportDepartureName);
+		int timezone2 = AirportDAO.getInstance().selectTimeZoneAirport(airportArrivalName);
+		return (timezone2 - timezone1);
 	}
 
 }
