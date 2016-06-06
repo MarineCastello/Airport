@@ -48,7 +48,7 @@ public class ControlerServlet extends HttpServlet {
 	}
 	
 	public void getListPlaneByAirport(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ModelBeanPlaneInAirport beanPlaneInAirport = new ModelBeanPlaneInAirport("", new ArrayList<Plane>());
+		ModelBeanPlaneInAirport beanPlaneInAirport = new ModelBeanPlaneInAirport("", new ArrayList<String>());
 		
 		// Traitement des entrees de la page d'accueil
 		if (request.getParameter("DEPARTAIRPORT") != null) {
@@ -59,7 +59,7 @@ public class ControlerServlet extends HttpServlet {
 				
 				// metier
 				PlaneService planeService = PlaneService.getInstance();
-				List<Plane> lstPlane = planeService.selectAvailablePlanes(departAirport);
+				List<String> lstPlane = planeService.selectAvailablePlanes(departAirport);
 				beanPlaneInAirport = new ModelBeanPlaneInAirport(departAirport, lstPlane);
 			} catch (Exception e) {
 				System.out.println("Erreur lors de la recuperation du bean 'PlaneInAirport'");

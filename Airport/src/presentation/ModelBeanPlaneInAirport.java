@@ -6,12 +6,12 @@ import entity.Plane;
 
 public class ModelBeanPlaneInAirport {
 	private String airport;
-	private List<Plane> lstPlane;
+	private List<String> lstPlane;
 	
 	public ModelBeanPlaneInAirport() {
 	}
 
-	public ModelBeanPlaneInAirport(String airport, List<Plane> lstPlane) {
+	public ModelBeanPlaneInAirport(String airport, List<String> lstPlane) {
 		super();
 		this.airport = airport;
 		this.lstPlane = lstPlane;
@@ -25,11 +25,11 @@ public class ModelBeanPlaneInAirport {
 		this.airport = airport;
 	}
 
-	public List<Plane> getLstPlane() {
+	public List<String> getLstPlane() {
 		return lstPlane;
 	}
 
-	public void setLstPlane(List<Plane> lstPlane) {
+	public void setLstPlane(List<String> lstPlane) {
 		this.lstPlane = lstPlane;
 	}
 
