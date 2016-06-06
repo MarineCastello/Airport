@@ -4,7 +4,9 @@ import java.util.List;
 
 import dbAccess.MyDBException;
 import dbAccess.PlaneDAO;
+import entity.Airline;
 import entity.Airport;
+import entity.Factory;
 import entity.Plane;
 
 public class PlaneService {
@@ -19,16 +21,19 @@ public class PlaneService {
 		return instance;
 	}
 
-	public boolean getAvailability(Plane p) {
+	public boolean getAvailability(String planeName) {
+		Plane p = Factory.createPlane(planeName);
 		return p.isAvailable();
 	}
 
-	public void updateCurrentAirport(Plane p, Airport a) {
-		PlaneDAO.getInstance().updateCurrentAirport(p, a);
-	}
-
-	public void insertPlane(Plane p) throws MyDBException {
+	//public void updateCurrentAirport(Plane p, Airport a) throws MyDBException {
+	//	PlaneDAO.getInstance().updateCurrentAirport(p, a);
+	//}
+	
+	public void insertPlane(String planeName, Airport currentAirport, Airline airline, boolean available) throws MyDBException {
+		Plane p = Factory.createPlane(planeName, currentAirport, airline, available);
 		PlaneDAO.getInstance().insertPlane(p);
+		// On ne vérifie pas si l'avion existe déjà en base de données
 	}
 
 	public List<Plane> selectAll() throws MyDBException {
